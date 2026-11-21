@@ -1,0 +1,54 @@
+body {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-evenly;
+    padding-top: 10vh;
+
+    background-color: beige;
+    color: darkorange;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bold;
+    font-size: large;
+}
+
+.left,
+.right {
+    align-self: center;
+}
+
+.cell {
+    border: 5px navy solid;
+
+    align-content: center;
+}
+
+.cellP {
+    justify-self: center;
+    color: darkorange;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 2.5vw;
+}
+
+h1 {
+    color: navy;
+}
+
+button {
+    background-color: navy;
+    ;
+    color: darkorange;
+    border-radius: 25px;
+    border: none;
+    padding: 1vh 1vw;
+}
+
+button:hover {
+    background-color: darkorange;
+    color: navy;
+}

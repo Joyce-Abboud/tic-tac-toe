@@ -1,182 +1,128 @@
-//store the gameboard as an array inside of a Gameboard object,
-const board = [];
-const rows = 3;
-const columns = 3;
-let activePlayer = "X";
+const winner = document.querySelector(".winner");
+const turn = document.querySelector(".turn");
+const restart = document.querySelector(".restart");
+document.querySelectorAll(".cellP").forEach((p) => {
+    p.textContent = "";
+});
+//logic
+const Gameboard = //iife
+    (function Gameboard() {//store the gameboard as an array inside of a Gameboard object,
+        const board = [];
+        const rows = 3;
+        const columns = 3;
+        function createGrid() {
+            for (let i = 0; i < rows; i++) {
+                board[i] = [];
+                for (let j = 0; j < columns; j++) {
+                    board[i].push(0);
+                }
+            }
+        } createGrid();
+        function getboard() {
+            return board;
+        }
+        function restartboard() {
+            createGrid();
+        }
+        return { getboard, restartboard };
+    })();
+console.log(Gameboard.getboard());
 
-function Gameboard() {
-    for (let i = 0; i < rows; i++) {
-        board[i] = [];
-        for (let j = 0; j < columns; j++) {
-            board[i].push(0);
+const GameController = (function () {
+
+    let player1 = player("player 1", "O", "1");
+    let player2 = player("player 2", "X", "2");
+    let activePlayer = player1;
+    let win = false;
+    let symbol = `${activePlayer.symbol}`;
+    //players are also going to be stored in objects,
+    function player(name, symbol, number) {
+        return {
+            name: name,
+            symbol: symbol,
+            number: number
         }
     }
-}
-Gameboard();
+    function switchplayer() {
 
-//players are also going to be stored in objects,
-const players = [
-    {
-        name: "player 1",
-        symbol: "O",
-    },
-    {
-        name: "player 2",
-        symbol: "X",
-    }
-]
-//taking turns
-function switchPlayer() {
-    if (activePlayer === "X") {
-        activePlayer = "O";
-    } else {
-        activePlayer = "X";
-    }
-}
-function wait() {
-    let i = 4e9;
-    while (--i > 0);
-}
-let win = "";
-//an object to control the flow of the game itself.
-function flow(row, column) {
-    function checkWin() {
-        //checks for 3in a row i i+1 i+2 OR ij  i-1 j+1  i-2 j+2  OR  ij  i-1 j-1  i-2  j-2  OR j j+1 j+2
-        if ((board[0][column] == board[1][column] && board[1][column] == board[2][column]) ||
-            (board[row][0] == board[row][1] && board[row][1] == board[row][2]) ||
-            (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[1][1] != 0) ||
-            (board[2][0] == board[1][1] && board[1][1] == board[0][2] && board[1][1] != 0)) {
-            console.log(`${activePlayer}`, "You win");
-            win = true; // always returning WHYYY
-            return true;
-        } else if (board.every(row => !row.includes(0))) {
-            //check for ties: full array, no 3 in rows
-            console.log("It's a tie!");
-            //win = true; // bas kermel twa2ef elle3be
+        if (activePlayer == player1) {
+            activePlayer = player2;
+            symbol = player2.symbol;
         } else {
-            win = false;
-            return false;
+            activePlayer = player1;
+            symbol = player1.symbol;
         }
+        turn.textContent = (`${symbol} turn`);
     }
-    //changes the array the gameboard ye3ne 
-    if (activePlayer == "O") {
-        //check if it;s already taken 
-        if (board[row][column] != 0) {
-            console.log("Already taken!");
-            return;
-        } else {
-            board[row][column] = "O";
-
-            checkWin();
-            switchPlayer();
-        }
-
-    } else if (activePlayer == "X") {
-        if (board[row][column] != 0) {
-            console.log("Already taken!");
-            return;
-        } else {
-            board[row][column] = "X"; //TODO: combine the 2 players into one action
-            checkWin();
-            switchPlayer();
-        }
-    }
-}
-
-//automatically ask for the next input
-function ask() {
-    for (let i = 0; i <= 9; i++) {
-        const row = prompt(`${activePlayer}`, "Which row? (0-2):");
-        const column = prompt(`${activePlayer}`, "Which column? (0-2):");
-        flow(row, column);
-        console.table(board);//should it be in another display? TODO
-        wait();
-        //  if it someone won - end
+    function playRound(row, column, cellP) {
         if (win == true) {
-            break;
-        } else if (win == false) {
-            continue;
+            return;
+        } else if (Gameboard.getboard()[row][column] != 0) {
+            console.log("Already taken!");
+            winner.textContent = "Already taken";
+            return;
+        } else {
+            Gameboard.getboard()[row][column] = symbol;
+            cellP.textContent = symbol;
+            checkWin();
         }
-        // if someone got already taken? test it : it asks again
-        // what if someone put a number larger than 2 or < 0 ??: it throws an error 
-    }
-}
+        if (!win) { switchplayer(); }
 
-function restart() {
-    for (let i = 0; i < rows; i++) {
-        board[i] = [];
-        for (let j = 0; j < columns; j++) {
-            board[i].push(0);
+        function checkWin() {
+            //checks for 3in a row i i+1 i+2 OR ij  i-1 j+1  i-2 j+2  OR  ij  i-1 j-1  i-2  j-2  OR j j+1 j+2
+            for (let i = 0; i < 3; i++) {
+                const isWin1 = Gameboard.getboard()[0][i] == Gameboard.getboard()[1][i] && Gameboard.getboard()[1][i] == Gameboard.getboard()[2][i] && Gameboard.getboard()[1][i] !== 0;
+                const isWin2 = Gameboard.getboard()[i][0] == Gameboard.getboard()[i][1] && Gameboard.getboard()[i][1] == Gameboard.getboard()[i][2] && Gameboard.getboard()[i][1] !== 0;
+                const isWin3 = Gameboard.getboard()[0][0] == Gameboard.getboard()[1][1] && Gameboard.getboard()[1][1] == Gameboard.getboard()[2][2] && Gameboard.getboard()[1][1] !== 0;
+                const isWin4 = Gameboard.getboard()[2][0] == Gameboard.getboard()[1][1] && Gameboard.getboard()[1][1] == Gameboard.getboard()[0][2] && Gameboard.getboard()[1][1] !== 0;
+                if (isWin1 || isWin2 || isWin3 || isWin4) {
+                    winner.textContent = (`${symbol} YOU WIN!`);
+                    turn.textContent = "Game over";
+                    win = true;
+                    break;
+                } else if (Gameboard.getboard().every(row => !row.includes(0))) {//check for ties: full array, no 3 in rows
+                    winner.textContent = "It's a tie!"
+                    break;
+                } else {
+                    win = false;
+                    continue;
+                }
+            }
         }
     }
-}
 
-//TESTS , REMOVE LATER
-function TEST() {
-    // 3 x 7ad ba3d
-    flow(0, 0);
-    flow(1, 1);
-    flow(0, 1);
-    flow(1, 2);
-    flow(0, 2);
-}
+    restart.addEventListener("click", () => {
+        document.querySelectorAll(".cellP").forEach((p) => { p.textContent = ""; });
+        win = false;
+        turn.textContent = "O turn";
+        winner.textContent = "";
+        symbol = player1.symbol;
+        activePlayer = player1;
+        Gameboard.restartboard();
+    });
 
-function TEST2() {
-    // 3 O fou2 ba3d bil nos
-    flow(0, 1);
-    flow(1, 2);
-    flow(1, 1);
-    flow(2, 2);
-    flow(2, 1);
-}
 
-function TEST3() {
-    //DIAGONAL 1
-    flow(0, 0);
-    flow(1, 1);
-    flow(2, 2);
-}
+    function play() {//automatically ask for the next input
+        //DOMMMMMMM
+        const container = document.querySelector(".container");
 
-function TEST4() {
-    //diagonal 2
-    flow(0, 2);
-    flow(1, 1);
-    flow(2, 0);
-}
+        (() => {
+            for (let row = 0; row < 3; row++) {
+                for (let column = 0; column < 3; column++) {
+                    const cell = document.createElement("div");
+                    cell.classList.add("cell");
+                    cell.dataset.row = row;
+                    cell.dataset.column = column;
 
-function TESTtie() {
-    flow(1, 1);//1
-    flow(0, 2);//2
-    flow(1, 2);//3
-    flow(1, 0);//4
-    flow(2, 2);//5
-    flow(0, 0);//6
-    flow(0, 1);//7
-    flow(2, 1);//8
-    flow(2, 0);//9
-}
+                    const cellP = document.createElement("p");
+                    cellP.classList.add("cellP");
+                    cell.append(cellP);
 
-function TESTtie2() {
-    flow(1, 1);//1
-    flow(0, 2);//2
-    flow(1, 2);//3
-    flow(1, 0);//4
-    flow(2, 2);//5
-    flow(0, 0);//6
-    flow(0, 1);//7
-    flow(2, 1);//8
-    flow(2, 0);//9
-}
-
-function test() {
-    TEST();
-    restart();
-    TEST2();
-    restart();
-    TEST3();
-    restart();
-    TEST4();
-    restart();
-    TESTtie();
-    restart();
-}
+                    cell.addEventListener("click", () => playRound(row, column, cellP));
+                    container.appendChild(cell);
+                }
+            }
+        })();
+        //
+    } play();
+})();
