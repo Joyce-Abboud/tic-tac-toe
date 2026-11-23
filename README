@@ -1,0 +1,22 @@
+# Tic-Tac-Toe
+
+Tic-Tac-Toe built for [The Odin Project](https://www.theodinproject.com/lessons/node-path-javascript-tic-tac-toe) using HTML, CSS, and vanilla JavaScript.
+
+## What It Does
+
+- 3x3 board where clicks place marks, alternate turns, block moves on taken cells, and stop play once someone wins or ties.
+- Change names modal (`<dialog>` + `<form>`) so players can pick custom names and symbols.
+- Win checks across rows, columns, and diagonals, plus tie detection.
+- Restart button to wipe the board and reset the turn back to the first player.
+- Different colors for each player's marks and live turn/win status text.
+
+## Built With
+
+- HTML
+- CSS
+- JavaScript (IIFEs / module pattern and factory functions)
+
+## Notes from Building It
+
+- Kept the board and game controller inside IIFEs and factory functions instead of scattering variables globally.
+- Spent a good chunk of time making sure `activePlayer`, the current symbol, and the turn text stayed in sync when changing symbols or hitting restart—and catching sneaky bugs like empty symbol strings matching `0` on the first click.
