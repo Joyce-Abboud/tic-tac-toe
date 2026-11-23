@@ -11,10 +11,36 @@
 <body>
     <section class="left">
         <H1>Tic - Tac - Toe</H1>
-        <p class="turn"> Turn</p>
+        <p class="turn"></p>
         <p class="winner"></p>
         <button class="restart">Restart</button>
+        <button class="change" command="show-modal" commandfor="my-dialog" id="change">Change names</button>
+        <dialog id="my-dialog">
+            <p>Change player's names and symbols</p>
+            <form>
+                <fieldset>
+                    <legend>Player 1 info: </legend>
+                    <label for="name1">Name:</label>
+                    <input type="text" name="name1" id="name1" value="one">
+
+                    <label for="name1">Symbol: </label>
+                    <input type="text" name="symbol1" id="symbol1" maxlength="1" value="O">
+                </fieldset>
+                <fieldset>
+                    <legend>Player 2 info: </legend>
+                    <label for="name2">Name:</label>
+                    <input type="text" name="name2" id="name2" value="two">
+
+                    <label for="name2">Symbol: </label>
+                    <input type="text" name="symbol2" id="symbol2" maxlength="1" value="X">
+                </fieldset>
+            </form>
+            <button type="submit" class="submit buttons">Submit</button>
+            <button commandfor="my-dialog" command="close" class="buttons">Close</button>
+        </dialog>
+
     </section>
+
     <section class="right">
         <div class="container">
 

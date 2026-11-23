@@ -18,8 +18,7 @@ body {
 }
 
 .cell {
-    border: 5px navy solid;
-
+    background-color: beige;
     align-content: center;
 }
 
@@ -28,11 +27,17 @@ body {
     color: darkorange;
 }
 
+.other {
+    color: brown;
+}
+
 .container {
     display: grid;
     grid-template-columns: repeat(3, 100px);
     grid-template-rows: repeat(3, 100px);
-    gap: 2.5vw;
+    border: 5px beige solid;
+    background-color: navy;
+    gap: 5px;
 }
 
 h1 {
@@ -46,9 +51,47 @@ button {
     border-radius: 25px;
     border: none;
     padding: 1vh 1vw;
+    margin: 1vh 1vw;
 }
 
 button:hover {
     background-color: darkorange;
     color: navy;
+}
+
+dialog {
+    background-color: beige;
+    color: navy;
+    border-color: darkorange;
+    border-radius: 25px;
+}
+
+dialog p {
+    color: darkorange;
+    font-weight: bold;
+    font-size: large;
+}
+
+input {
+    border-radius: 25px;
+    border: 1px gray solid;
+    padding: 5px;
+}
+
+input:focus {
+    border-color: darkorange;
+    outline: 2px solid orange;
+}
+
+fieldset {
+    padding: 3vh 3vw;
+    margin-bottom: 15px;
+    border-radius: 15px;
+}
+
+.buttons {
+    width: stretch;
+    height: auto;
+    margin-right: 10vw;
+    margin-left: 10vw;
 }
